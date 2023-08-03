@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         fontFamily: GoogleFonts.inter().fontFamily,
         textTheme: const TextTheme(
           headlineMedium: TextStyle(
-            fontSize: 48,
+            fontSize: 38,
             fontWeight: FontWeight.w500,
           ),
         ),
