@@ -6,6 +6,7 @@ import 'package:thoughts/dialogs/add_thought.dart';
 import 'package:thoughts/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/user.dart';
+import 'package:thoughts/screens/login.dart';
 import 'package:thoughts/screens/settings.dart';
 import 'package:thoughts/screens/thoughts.dart';
 import 'package:thoughts/types/misc.dart';
@@ -73,12 +74,31 @@ class _ThoughtsState extends State<Thoughts> {
   void initState() {
     super.initState();
 
-    context.read<UserProvider>().initAuth();
-    context.read<ThoughtsProvider>().listenForDay(selectedDayTimestamp);
+    context.read<UserProvider>().initAuth(
+      onUserAvailable: () {
+        context.read<ThoughtsProvider>().listenForDay(selectedDayTimestamp);
+      },
+    );
+
+    context.read<UserProvider>().addListener(() {
+      if (context.read<UserProvider>().user == null) {
+        setState(() {
+          _selectedIndex = 0;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>().user;
+
+    if (user == null) {
+      return const Scaffold(
+        body: SafeArea(child: LoginScreen()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(

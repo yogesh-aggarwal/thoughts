@@ -17,6 +17,9 @@ class ThoughtsProvider with ChangeNotifier {
   listenForDay(int dayTimestamp) {
     if (_listeningForDay == dayTimestamp) return;
 
+    final userID = auth.currentUser?.uid;
+    if (userID == null) return;
+
     thoughts = null;
     if (_listener != null) notifyListeners();
 
@@ -25,7 +28,7 @@ class ThoughtsProvider with ChangeNotifier {
 
     _listener = thoughtsColl
         .where("dayCreated", isEqualTo: dayTimestamp)
-        .where("createdBy", isEqualTo: auth.currentUser!.uid)
+        .where("createdBy", isEqualTo: userID)
         .snapshots()
         .listen(
       (event) {

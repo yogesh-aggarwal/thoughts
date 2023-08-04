@@ -62,7 +62,7 @@ class SettingsScreen extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16),
+        SizedBox(height: 32),
         ListTile(
           leading: Icon(Icons.logout),
           title: Text('Logout'),
