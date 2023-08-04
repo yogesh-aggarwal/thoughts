@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:thoughts/core/auth.dart';
 import 'package:thoughts/dialogs/add_thought.dart';
 import 'package:thoughts/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/user.dart';
+import 'package:thoughts/screens/settings.dart';
 import 'package:thoughts/screens/thoughts.dart';
 import 'package:thoughts/types/misc.dart';
 
@@ -130,24 +130,26 @@ class _ThoughtsState extends State<Thoughts> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(selectedDayTimestamp == todayTimestamp
-            ? Icons.add
-            : Icons.today_outlined),
-        onPressed: () {
-          if (selectedDayTimestamp == todayTimestamp) {
-            showAddThoughtDialog(
-              context: context,
-              dayTimestamp: selectedDayTimestamp,
-            );
-          } else {
-            setState(() {
-              selectedDayTimestamp = todayTimestamp;
-            });
-            context.read<ThoughtsProvider>().listenForDay(todayTimestamp);
-          }
-        },
-      ),
+      floatingActionButton: _selectedIndex != 0
+          ? null
+          : FloatingActionButton(
+              child: Icon(selectedDayTimestamp == todayTimestamp
+                  ? Icons.add
+                  : Icons.today_outlined),
+              onPressed: () {
+                if (selectedDayTimestamp == todayTimestamp) {
+                  showAddThoughtDialog(
+                    context: context,
+                    dayTimestamp: selectedDayTimestamp,
+                  );
+                } else {
+                  setState(() {
+                    selectedDayTimestamp = todayTimestamp;
+                  });
+                  context.read<ThoughtsProvider>().listenForDay(todayTimestamp);
+                }
+              },
+            ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (int index) {
@@ -173,12 +175,7 @@ class _ThoughtsState extends State<Thoughts> {
           case 0:
             return const ThoughtsScreen();
           case 1:
-            return IconButton(
-              onPressed: () {
-                signInWithGoogle();
-              },
-              icon: Icon(Icons.settings),
-            );
+            return const SettingsScreen();
           default:
             return const Placeholder();
         }
