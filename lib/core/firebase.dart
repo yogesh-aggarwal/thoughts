@@ -13,3 +13,4 @@ final storage = FirebaseStorage.instance;
 
 final usersColl = firestore.collection('Users');
 final thoughtsColl = firestore.collection('Thoughts');
+final timeTracksColl = firestore.collection('Time Tracks');

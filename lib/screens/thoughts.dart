@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thoughts/dialogs/view_thought.dart';
+import 'package:thoughts/dialogs/thoughts/view_thought.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/types/thought.dart';
 

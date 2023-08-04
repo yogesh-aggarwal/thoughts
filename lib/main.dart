@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:thoughts/dialogs/add_thought.dart';
+import 'package:thoughts/dialogs/thoughts/add_thought.dart';
+import 'package:thoughts/dialogs/time_tracker/add_time_track.dart';
 import 'package:thoughts/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
+import 'package:thoughts/providers/time_track.dart';
 import 'package:thoughts/providers/user.dart';
 import 'package:thoughts/screens/analysis.dart';
 import 'package:thoughts/screens/login.dart';
@@ -22,6 +24,7 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ThoughtsProvider()),
+        ChangeNotifierProvider(create: (_) => TimeTracksProvider()),
       ],
       child: App(),
     ),
@@ -196,25 +199,52 @@ class _ThoughtsState extends State<Thoughts> {
         actions: [
           IconButton(
             onPressed: () {
-              context.read<ThoughtsProvider>().changeSortOrder(
-                  context.read<ThoughtsProvider>().sortOrder ==
-                          SortOrder.descending
-                      ? SortOrder.ascending
-                      : SortOrder.descending);
+              switch (_selectedIndex) {
+                case 0:
+                  context.read<ThoughtsProvider>().changeSortOrder(
+                      context.read<ThoughtsProvider>().sortOrder ==
+                              SortOrder.descending
+                          ? SortOrder.ascending
+                          : SortOrder.descending);
+                  break;
+                case 1:
+                  context.read<TimeTracksProvider>().changeSortOrder(
+                      context.read<TimeTracksProvider>().sortOrder ==
+                              SortOrder.descending
+                          ? SortOrder.ascending
+                          : SortOrder.descending);
+                  break;
+              }
             },
-            icon: Icon(
-              context.watch<ThoughtsProvider>().sortOrder ==
-                      SortOrder.descending
-                  ? Icons.arrow_downward_outlined
-                  : Icons.arrow_upward_outlined,
-              color: Theme.of(context).textTheme.bodyMedium!.color,
-            ),
+            icon: (() {
+              switch (_selectedIndex) {
+                case 0:
+                  return Icon(
+                    context.watch<ThoughtsProvider>().sortOrder ==
+                            SortOrder.descending
+                        ? Icons.arrow_downward_outlined
+                        : Icons.arrow_upward_outlined,
+                    color: Theme.of(context).textTheme.bodyMedium!.color,
+                  );
+                case 1:
+                  return Icon(
+                    context.watch<TimeTracksProvider>().sortOrder ==
+                            SortOrder.descending
+                        ? Icons.arrow_downward_outlined
+                        : Icons.arrow_upward_outlined,
+                    color: Theme.of(context).textTheme.bodyMedium!.color,
+                  );
+                default:
+                  return Container();
+              }
+            })(),
           ),
         ],
       ),
-      floatingActionButton: _selectedIndex != 0
-          ? null
-          : FloatingActionButton(
+      floatingActionButton: (() {
+        switch (_selectedIndex) {
+          case 0:
+            return FloatingActionButton(
               child: Icon(selectedDayTimestamp == todayTimestamp
                   ? Icons.add
                   : Icons.today_outlined),
@@ -231,7 +261,34 @@ class _ThoughtsState extends State<Thoughts> {
                   context.read<ThoughtsProvider>().listenForDay(todayTimestamp);
                 }
               },
-            ),
+            );
+          case 1:
+            return FloatingActionButton(
+              child: Icon(selectedDayTimestamp == todayTimestamp
+                  ? Icons.add
+                  : Icons.today_outlined),
+              onPressed: () {
+                if (selectedDayTimestamp == todayTimestamp) {
+                  showAddTimeTrackDialog(
+                    context: context,
+                    dayTimestamp: selectedDayTimestamp,
+                  );
+                } else {
+                  setState(() {
+                    selectedDayTimestamp = todayTimestamp;
+                  });
+                  context
+                      .read<TimeTracksProvider>()
+                      .listenForDay(todayTimestamp);
+                }
+              },
+            );
+          case 2:
+          case 3:
+          default:
+            return null;
+        }
+      })(),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (int index) {
