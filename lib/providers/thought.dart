@@ -2,11 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:thoughts/core/firebase.dart';
+import 'package:thoughts/types/misc.dart';
 import 'package:thoughts/types/thought.dart';
 import 'package:uuid/uuid.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class ThoughtsProvider with ChangeNotifier {
   List<Thought>? thoughts;
+  SortOrder sortOrder = SortOrder.descending;
 
   int? _listeningForDay;
   StreamSubscription? _listener;
@@ -26,15 +29,27 @@ class ThoughtsProvider with ChangeNotifier {
         .snapshots()
         .listen(
       (event) {
+        final sortOrder = this.sortOrder == SortOrder.ascending ? 1 : -1;
         if (event.docs.isEmpty) {
           thoughts = [];
         } else {
-          thoughts = event.docs.map((e) => Thought.fromMap(e.data())).toList();
+          thoughts = event.docs
+              .map((e) => Thought.fromMap(e.data()))
+              .sortedBy((a, b) => (a.dateCreated - b.dateCreated) * sortOrder)
+              .toList();
         }
 
         notifyListeners();
       },
     );
+  }
+
+  changeSortOrder(SortOrder sortOrder) {
+    this.sortOrder = sortOrder;
+    if (thoughts != null) {
+      thoughts = thoughts!.reversed.toList();
+    }
+    notifyListeners();
   }
 
   add(String content) async {
@@ -47,5 +62,9 @@ class ThoughtsProvider with ChangeNotifier {
     );
 
     await thoughtsColl.doc(thought.id).set(thought.toMap());
+  }
+
+  delete(String id) async {
+    await thoughtsColl.doc(id).delete();
   }
 }

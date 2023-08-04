@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/core/auth.dart';
-import 'package:thoughts/dialogs/addThought.dart';
+import 'package:thoughts/dialogs/add_thought.dart';
 import 'package:thoughts/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/user.dart';
 import 'package:thoughts/screens/thoughts.dart';
+import 'package:thoughts/types/misc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -62,6 +63,11 @@ class _ThoughtsState extends State<Thoughts> {
     DateTime.now().month,
     DateTime.now().day,
   ).millisecondsSinceEpoch;
+  final todayTimestamp = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  ).millisecondsSinceEpoch;
 
   @override
   void initState() {
@@ -97,31 +103,49 @@ class _ThoughtsState extends State<Thoughts> {
                   DateTime.now().day,
                 )).then((value) {
               if (value != null) {
+                setState(() {
+                  selectedDayTimestamp = value.millisecondsSinceEpoch;
+                });
                 context
                     .read<ThoughtsProvider>()
                     .listenForDay(value.millisecondsSinceEpoch);
               }
             });
-            // context
-            //     .read<ThoughtsProvider>()
-            //     .listenForDay(selectedDayTimestamp);
           },
           icon: const Icon(Icons.calendar_month_outlined),
         ),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.search),
+            onPressed: () {
+              context.read<ThoughtsProvider>().changeSortOrder(
+                  context.read<ThoughtsProvider>().sortOrder ==
+                          SortOrder.descending
+                      ? SortOrder.ascending
+                      : SortOrder.descending);
+            },
+            icon: Icon(context.watch<ThoughtsProvider>().sortOrder ==
+                    SortOrder.descending
+                ? Icons.arrow_downward_outlined
+                : Icons.arrow_upward_outlined),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
+        child: Icon(selectedDayTimestamp == todayTimestamp
+            ? Icons.add
+            : Icons.today_outlined),
         onPressed: () {
-          showAddThoughtDialog(
-            context: context,
-            dayTimestamp: selectedDayTimestamp,
-          );
+          if (selectedDayTimestamp == todayTimestamp) {
+            showAddThoughtDialog(
+              context: context,
+              dayTimestamp: selectedDayTimestamp,
+            );
+          } else {
+            setState(() {
+              selectedDayTimestamp = todayTimestamp;
+            });
+            context.read<ThoughtsProvider>().listenForDay(todayTimestamp);
+          }
         },
       ),
       bottomNavigationBar: NavigationBar(

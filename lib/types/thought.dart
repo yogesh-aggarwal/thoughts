@@ -29,6 +29,7 @@ class Thought {
       'content': content,
       'dayCreated': dayCreated,
       'dateCreated': dateCreated,
+      'createdBy': createdBy,
     };
   }
 

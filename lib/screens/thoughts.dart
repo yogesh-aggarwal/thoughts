@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thoughts/dialogs/view_thought.dart';
 import 'package:thoughts/providers/thought.dart';
 
 class ThoughtsScreen extends StatefulWidget {
@@ -28,15 +29,20 @@ class _ThoughtsScreenState extends State<ThoughtsScreen> {
 
     return ListView(
       children: thoughts.map((thought) {
+        DateTime thoughtAt =
+            DateTime.fromMillisecondsSinceEpoch(thought.dateCreated);
+
         return ListTile(
-          onTap: () {},
+          onTap: () {
+            showViewThoughtDialog(context, thought);
+          },
           title: Text(
-            "This is a thought",
+            thought.content,
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           leading: Icon(Icons.lightbulb_outline),
           subtitle: Text(
-            "thought at 10:30",
+            "thought at ${thoughtAt.hour}:${thoughtAt.minute}",
             style: Theme.of(context).textTheme.bodySmall,
           ),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
