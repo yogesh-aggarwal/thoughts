@@ -133,6 +133,7 @@ class _ThoughtsState extends State<Thoughts> {
     context.read<UserProvider>().initAuth(
       onUserAvailable: () {
         context.read<ThoughtsProvider>().listenForDay(selectedDayTimestamp);
+        context.read<TimeTracksProvider>().listenForDay(selectedDayTimestamp);
       },
     );
 
@@ -187,6 +188,9 @@ class _ThoughtsState extends State<Thoughts> {
                 });
                 context
                     .read<ThoughtsProvider>()
+                    .listenForDay(value.millisecondsSinceEpoch);
+                context
+                    .read<TimeTracksProvider>()
                     .listenForDay(value.millisecondsSinceEpoch);
               }
             });

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/time_track.dart';
 
 class AddTimeTrackForm extends StatefulWidget {
@@ -23,13 +22,13 @@ class AddTimeTrackFormState extends State<AddTimeTrackForm> {
         return !_isLoading;
       },
       child: AlertDialog(
-        title: const Text("Add Thought"),
+        title: const Text("Add tracker name"),
         content: TextField(
-          maxLines: 4,
+          maxLines: 1,
           autofocus: true,
           controller: _content,
           decoration: const InputDecoration(
-            hintText: "What's on your mind?",
+            hintText: "Your concern name",
           ),
         ),
         actions: [

@@ -35,7 +35,7 @@ class TimeTracksProvider with ChangeNotifier {
     _listener?.cancel();
     _listeningForDay = dayTimestamp;
 
-    _listener = thoughtsColl
+    _listener = timeTracksColl
         .where("dayCreated", isEqualTo: dayTimestamp)
         .where("createdBy", isEqualTo: userID)
         .snapshots()
