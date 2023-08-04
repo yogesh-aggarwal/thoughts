@@ -14,11 +14,16 @@ class ThoughtsProvider with ChangeNotifier {
   int? _listeningForDay;
   StreamSubscription? _listener;
 
+  String listenedForUserID = "";
+
   listenForDay(int dayTimestamp) {
-    if (_listeningForDay == dayTimestamp) return;
+    if (_listeningForDay == dayTimestamp &&
+        auth.currentUser?.uid == listenedForUserID) return;
 
     final userID = auth.currentUser?.uid;
     if (userID == null) return;
+
+    listenedForUserID = userID;
 
     thoughts = null;
     if (_listener != null) notifyListeners();

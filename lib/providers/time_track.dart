@@ -15,6 +15,8 @@ class TimeTracksProvider with ChangeNotifier {
   int? _listeningForDay;
   StreamSubscription? _listener;
 
+  String listenedForUserID = "";
+
   changeSortOrder(SortOrder sortOrder) {
     this.sortOrder = sortOrder;
     if (timeTracks != null) {
@@ -24,10 +26,13 @@ class TimeTracksProvider with ChangeNotifier {
   }
 
   listenForDay(int dayTimestamp) {
-    if (_listeningForDay == dayTimestamp) return;
+    if (_listeningForDay == dayTimestamp &&
+        auth.currentUser?.uid == listenedForUserID) return;
 
     final userID = auth.currentUser?.uid;
     if (userID == null) return;
+
+    listenedForUserID = userID;
 
     timeTracks = null;
     if (_listener != null) notifyListeners();

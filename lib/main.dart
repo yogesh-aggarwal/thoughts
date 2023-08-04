@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/dialogs/thoughts/add_thought.dart';
 import 'package:thoughts/dialogs/time_tracker/add_time_track.dart';
-import 'package:thoughts/firebase_options.dart';
+import 'package:thoughts/core/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/time_track.dart';
 import 'package:thoughts/providers/user.dart';
@@ -93,6 +93,8 @@ class _ThoughtsState extends State<Thoughts> {
         setState(() {
           _selectedIndex = 0;
         });
+        context.read<ThoughtsProvider>().listenForDay(selectedDayTimestamp);
+        context.read<TimeTracksProvider>().listenForDay(selectedDayTimestamp);
       }
     });
   }
