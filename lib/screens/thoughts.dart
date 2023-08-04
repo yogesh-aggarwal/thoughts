@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/providers/thought.dart';
-import 'package:thoughts/providers/user.dart';
 
 class ThoughtsScreen extends StatefulWidget {
   const ThoughtsScreen({super.key});
@@ -11,13 +10,9 @@ class ThoughtsScreen extends StatefulWidget {
 }
 
 class _ThoughtsScreenState extends State<ThoughtsScreen> {
-  int selectedDayTimestamp = 1685039400000;
-
   @override
   void initState() {
     super.initState();
-
-    context.read<ThoughtsProvider>().listenForDay(selectedDayTimestamp);
   }
 
   @override
@@ -28,7 +23,7 @@ class _ThoughtsScreenState extends State<ThoughtsScreen> {
       return const Center(child: CircularProgressIndicator());
     }
     if (thoughts.isEmpty) {
-      return const Center(child: Text("No thoughts yet"));
+      return const Center(child: Text("No thoughts yet."));
     }
 
     return ListView(

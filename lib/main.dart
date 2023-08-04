@@ -64,7 +64,11 @@ class _ThoughtsState extends State<Thoughts> {
           ),
           centerTitle: true,
           leading: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              // context
+              //     .read<ThoughtsProvider>()
+              //     .listenForDay(selectedDayTimestamp);
+            },
             icon: const Icon(Icons.calendar_month_outlined),
           ),
           actions: [

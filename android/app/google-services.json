@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "703494670804-sdja039nrqsg1j2n4pklsucmadbn07ia.apps.googleusercontent.com",
+          "client_id": "703494670804-57a42k2ggljqac6f4p4grejb8v651jpi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "in.yogeshaggarwal.thoughts",
-            "certificate_hash": "97d979d019b69841f0693fe8a962a2f7d99c7e95"
+            "certificate_hash": "ef2dbf3b85ed742da95740369740df97af5fb68f"
           }
         },
         {

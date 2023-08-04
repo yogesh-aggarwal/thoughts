@@ -22,15 +22,25 @@ class UserProvider with ChangeNotifier {
     });
   }
 
-  void initAuth() {
+  initAuth() {
     _listener?.cancel();
-    _listener = auth.authStateChanges().listen((user) {
-      print("user");
-      print(user);
+    _listener = auth.authStateChanges().listen((user) async {
       if (user == null) {
         this.user = null;
         notifyListeners();
       } else {
+        final u = await usersColl.doc(user.uid).get();
+        if (!u.exists) {
+          this.user = User(
+            id: user.uid,
+            name: user.displayName ?? "Anonymous",
+            dp: user.photoURL ?? "https://picsum.photos/200",
+            email: user.email ?? "",
+            phoneNumber: user.phoneNumber,
+          );
+          await usersColl.doc(user.uid).set(this.user!.toMap());
+        }
+
         listen(user.uid);
       }
     });

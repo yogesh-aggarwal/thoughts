@@ -1,9 +1,17 @@
 class User {
-  final String id;
-  final String name;
-  final String email;
+  String id;
+  String name;
+  String email;
+  String dp;
+  String? phoneNumber;
 
-  User({required this.id, required this.name, required this.email});
+  User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.dp,
+    required this.phoneNumber,
+  });
 
   String get initials {
     String initials = '';
@@ -22,6 +30,8 @@ class User {
       'id': id,
       'name': name,
       'email': email,
+      'dp': dp,
+      'phoneNumber': phoneNumber,
     };
   }
 
@@ -30,6 +40,8 @@ class User {
       id: map['id'],
       name: map['name'],
       email: map['email'],
+      dp: map['dp'],
+      phoneNumber: map['phoneNumber'],
     );
   }
 }

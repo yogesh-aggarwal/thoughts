@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:thoughts/core/firebase.dart';
+import 'package:thoughts/types/thought.dart';
 
 class ThoughtsProvider with ChangeNotifier {
-  List<String>? thoughts;
+  List<Thought>? thoughts;
 
   int? _listeningForDay;
   StreamSubscription? _listener;
@@ -13,7 +14,7 @@ class ThoughtsProvider with ChangeNotifier {
     if (_listeningForDay == dayTimestamp) return;
 
     thoughts = null;
-    // notifyListeners();
+    notifyListeners();
 
     _listener?.cancel();
     _listeningForDay = dayTimestamp;
@@ -24,7 +25,11 @@ class ThoughtsProvider with ChangeNotifier {
         .snapshots()
         .listen(
       (event) {
-        print(event.docs);
+        if (event.docs.isEmpty) {
+          thoughts = [];
+        } else {
+          thoughts = event.docs.map((e) => Thought.fromMap(e.data())).toList();
+        }
 
         notifyListeners();
       },
