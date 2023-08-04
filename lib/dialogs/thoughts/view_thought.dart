@@ -42,26 +42,35 @@ class ViewThoughtDialog extends StatelessWidget {
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            // copy to clipboard
-            Clipboard.setData(ClipboardData(text: thought.content));
-          },
-          child: Text("Copy"),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text("Close"),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-            context.read<ThoughtsProvider>().delete(thought.id);
-          },
-          child: Text("Delete", style: TextStyle(color: Colors.red)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // copy to clipboard
+                Clipboard.setData(ClipboardData(text: thought.content));
+              },
+              child: Text("Copy"),
+            ),
+            Row(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Close"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    context.read<ThoughtsProvider>().delete(thought.id);
+                  },
+                  child: Text("Delete", style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
