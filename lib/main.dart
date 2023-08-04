@@ -10,6 +10,7 @@ import 'package:thoughts/screens/analysis.dart';
 import 'package:thoughts/screens/login.dart';
 import 'package:thoughts/screens/settings.dart';
 import 'package:thoughts/screens/thoughts.dart';
+import 'package:thoughts/screens/time_tracking.dart';
 import 'package:thoughts/types/misc.dart';
 
 Future<void> main() async {
@@ -245,6 +246,11 @@ class _ThoughtsState extends State<Thoughts> {
             label: 'Thoughts',
           ),
           NavigationDestination(
+            selectedIcon: Icon(Icons.timer),
+            icon: Icon(Icons.timer_outlined),
+            label: 'Tracker',
+          ),
+          NavigationDestination(
             selectedIcon: Icon(Icons.analytics),
             icon: Icon(Icons.analytics_outlined),
             label: 'Analysis',
@@ -261,8 +267,10 @@ class _ThoughtsState extends State<Thoughts> {
           case 0:
             return const ThoughtsScreen();
           case 1:
-            return const AnalysisScreen();
+            return const TimeTrackingScreen();
           case 2:
+            return const AnalysisScreen();
+          case 3:
             return const SettingsScreen();
           default:
             return const Placeholder();
