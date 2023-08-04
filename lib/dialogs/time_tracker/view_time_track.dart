@@ -69,10 +69,12 @@ class ViewTimeTrackDialog extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Time",
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                          Text("Time",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(color: Colors.grey.shade600)),
+                          SizedBox(height: 2),
                           Text(
                             "${visualTime(session.start)} - ${session.end == null ? "..." : visualTime(session.end!)}",
                             style: Theme.of(context).textTheme.bodyMedium,
@@ -85,8 +87,12 @@ class ViewTimeTrackDialog extends StatelessWidget {
                         children: [
                           Text(
                             "Duration",
-                            style: Theme.of(context).textTheme.bodySmall,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(color: Colors.grey.shade600),
                           ),
+                          SizedBox(height: 2),
                           Text(
                             visualDuration(session.duration),
                             style: Theme.of(context).textTheme.bodyMedium,

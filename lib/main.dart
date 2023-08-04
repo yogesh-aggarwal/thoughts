@@ -1,6 +1,6 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/dialogs/thoughts/add_thought.dart';
 import 'package:thoughts/dialogs/time_tracker/add_time_track.dart';
@@ -36,72 +36,23 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Thoughts",
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.transparent),
-        useMaterial3: true,
-        fontFamily: GoogleFonts.inter().fontFamily,
-        textTheme: const TextTheme(
-          bodySmall: TextStyle(
-            color: Colors.black54,
-            fontSize: 12,
-            fontWeight: FontWeight.w400,
+    return DynamicColorBuilder(
+      builder: (lightDynamic, darkDynamic) {
+        return MaterialApp(
+          title: "Thoughts",
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: lightDynamic,
+            useMaterial3: true,
           ),
-          headlineMedium: TextStyle(
-            fontSize: 38,
-            fontWeight: FontWeight.w500,
+          darkTheme: ThemeData(
+            colorScheme: darkDynamic,
+            useMaterial3: true,
           ),
-        ),
-      ),
-      darkTheme: ThemeData(
-        useMaterial3: true,
-        fontFamily: GoogleFonts.inter().fontFamily,
-        textTheme: const TextTheme(
-          titleSmall: TextStyle(
-            color: Colors.white,
-            fontSize: 38,
-            fontWeight: FontWeight.w500,
-          ),
-          titleMedium: TextStyle(
-            color: Colors.white,
-            fontSize: 38,
-            fontWeight: FontWeight.w500,
-          ),
-          titleLarge: TextStyle(
-            color: Colors.white,
-            fontSize: 38,
-            fontWeight: FontWeight.w500,
-          ),
-          headlineMedium: TextStyle(
-            fontSize: 38,
-            fontWeight: FontWeight.w500,
-          ),
-          bodySmall: TextStyle(
-            color: Colors.white38,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-          bodyMedium: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-          bodyLarge: TextStyle(
-            color: Colors.white,
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-        colorScheme:
-            ColorScheme.fromSeed(seedColor: Colors.transparent).copyWith(
-          background: Colors.black54,
-          surface: Colors.black54,
-        ),
-      ),
-      themeMode: ThemeMode.light,
-      home: Thoughts(),
+          themeMode: ThemeMode.system,
+          home: Thoughts(),
+        );
+      },
     );
   }
 }

@@ -35,7 +35,7 @@ class TimeTrackTile extends StatelessWidget {
                   Text(
                     timeTrack.name,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w500,
                         ),
                   ),
                   Container(
@@ -51,7 +51,7 @@ class TimeTrackTile extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 12),
+              SizedBox(height: 8),
               Text(
                 "Duration: ${visualDuration(timeTrack.duration)}",
                 style: Theme.of(context).textTheme.bodySmall,
