@@ -32,7 +32,12 @@ class TimeTrackTile extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(timeTrack.name),
+                  Text(
+                    timeTrack.name,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
                   Container(
                     width: 12,
                     height: 12,

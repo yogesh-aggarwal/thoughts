@@ -50,7 +50,7 @@ class ViewTimeTrackDialog extends StatelessWidget {
       ),
       content: ConstrainedBox(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.75,
+          maxHeight: MediaQuery.of(context).size.height * 0.5,
           minWidth: MediaQuery.of(context).size.width * 0.75,
         ),
         child: SingleChildScrollView(
@@ -59,7 +59,7 @@ class ViewTimeTrackDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 12),
-              ...timeTrack.sessions.map((session) {
+              ...timeTrack.sessions.reversed.map((session) {
                 return Container(
                   margin: EdgeInsets.only(bottom: 16),
                   child: Row(
@@ -70,11 +70,11 @@ class ViewTimeTrackDialog extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Start",
+                            "Time",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Text(
-                            visualTime(session.start),
+                            "${visualTime(session.start)} - ${session.end == null ? "..." : visualTime(session.end!)}",
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -84,13 +84,11 @@ class ViewTimeTrackDialog extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            "End",
+                            "Duration",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                           Text(
-                            session.end == null
-                                ? "..."
-                                : visualTime(session.end!),
+                            visualDuration(session.duration),
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -99,46 +97,79 @@ class ViewTimeTrackDialog extends StatelessWidget {
                   ),
                 );
               }).toList(),
-              SizedBox(height: 12),
-              Text(
-                "Total time: ${visualDuration(timeTrack.duration)}",
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
             ],
           ),
         ),
       ),
       actions: [
-        timeTrack.sessions.isNotEmpty && timeTrack.sessions.last.end == null
-            ? TextButton(
-                onPressed: () {
-                  context.read<TimeTracksProvider>().pause(timeTrack.id);
-                  Navigator.pop(context);
-                },
-                child: Text("End"),
-              )
-            : TextButton(
-                onPressed: () {
-                  context.read<TimeTracksProvider>().play(timeTrack.id);
-                  Navigator.pop(context);
-                },
-                child: Text("Start"),
-              ),
-        SizedBox(width: 16),
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text("Close"),
-        ),
-        TextButton(
-          onPressed: () {
-            context.read<TimeTracksProvider>().delete(timeTrack.id);
-            Navigator.pop(context);
-          },
-          child: Text("Delete", style: TextStyle(color: Colors.red)),
+        Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Total time: ${visualDuration(timeTrack.duration)}",
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                timeTrack.sessions.isNotEmpty &&
+                        timeTrack.sessions.last.end == null
+                    ? TextButton(
+                        onPressed: () {
+                          context
+                              .read<TimeTracksProvider>()
+                              .pause(timeTrack.id);
+                          Navigator.pop(context);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.pause),
+                            SizedBox(width: 8),
+                            Text("Pause"),
+                          ],
+                        ),
+                      )
+                    : TextButton(
+                        onPressed: () {
+                          context.read<TimeTracksProvider>().play(timeTrack.id);
+                          Navigator.pop(context);
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.play_arrow),
+                            SizedBox(width: 8),
+                            Text("Start"),
+                          ],
+                        ),
+                      ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text("Close"),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<TimeTracksProvider>().delete(timeTrack.id);
+                        Navigator.pop(context);
+                      },
+                      child:
+                          Text("Delete", style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ],
         ),
       ],
     );

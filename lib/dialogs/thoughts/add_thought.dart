@@ -23,12 +23,18 @@ class AddThoughtFormState extends State<AddThoughtForm> {
       },
       child: AlertDialog(
         title: const Text("Add Thought"),
-        content: TextField(
-          maxLines: 4,
-          autofocus: true,
-          controller: _content,
-          decoration: const InputDecoration(
-            hintText: "What's on your mind?",
+        content: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.5,
+            minWidth: MediaQuery.of(context).size.width * 0.75,
+          ),
+          child: TextField(
+            maxLines: 4,
+            autofocus: true,
+            controller: _content,
+            decoration: const InputDecoration(
+              hintText: "What's on your mind?",
+            ),
           ),
         ),
         actions: [

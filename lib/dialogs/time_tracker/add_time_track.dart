@@ -23,12 +23,18 @@ class AddTimeTrackFormState extends State<AddTimeTrackForm> {
       },
       child: AlertDialog(
         title: const Text("Add tracker name"),
-        content: TextField(
-          maxLines: 1,
-          autofocus: true,
-          controller: _content,
-          decoration: const InputDecoration(
-            hintText: "Your concern name",
+        content: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.5,
+            minWidth: MediaQuery.of(context).size.width * 0.75,
+          ),
+          child: TextField(
+            maxLines: 1,
+            autofocus: true,
+            controller: _content,
+            decoration: const InputDecoration(
+              hintText: "Your concern name",
+            ),
           ),
         ),
         actions: [

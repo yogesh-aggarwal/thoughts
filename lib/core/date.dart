@@ -9,5 +9,12 @@ String visualDuration(int duration) {
   final minutes = duration ~/ 1000 ~/ 60;
   final hours = minutes ~/ 60;
   final minutesLeft = minutes % 60;
-  return "$hours hours $minutesLeft minutes";
+
+  String result = "";
+
+  if (hours > 0) result += "$hours hr ";
+  if (minutesLeft > 0) result += "$minutesLeft min";
+  if (result.isEmpty) result = "${duration ~/ 1000} sec";
+
+  return result.trim();
 }

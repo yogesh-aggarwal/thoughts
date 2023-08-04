@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/types/thought.dart';
@@ -16,11 +17,15 @@ class ViewThoughtDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
         "thought at ${thoughtAt.hour}:${thoughtAt.minute}",
-        style: Theme.of(context).textTheme.bodyMedium,
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
       ),
       content: ConstrainedBox(
         constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.75),
+          maxHeight: MediaQuery.of(context).size.height * 0.5,
+          minWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -31,11 +36,20 @@ class ViewThoughtDialog extends StatelessWidget {
                 thought.content,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
       ),
       actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+            // copy to clipboard
+            Clipboard.setData(ClipboardData(text: thought.content));
+          },
+          child: Text("Copy"),
+        ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
