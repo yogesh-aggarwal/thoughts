@@ -24,6 +24,8 @@ class AddThoughtFormState extends State<AddThoughtForm> {
       child: AlertDialog(
         title: const Text("Add Thought"),
         content: TextField(
+          maxLines: 4,
+          autofocus: true,
           controller: _content,
           decoration: const InputDecoration(
             hintText: "What's on your mind?",
@@ -44,13 +46,8 @@ class AddThoughtFormState extends State<AddThoughtForm> {
                 _isLoading = true;
               });
 
-              context.read<ThoughtsProvider>().add(_content.text).then((value) {
-                _content.clear();
-                setState(() {
-                  _isLoading = false;
-                });
-                Navigator.pop(context);
-              });
+              context.read<ThoughtsProvider>().add(_content.text);
+              Navigator.pop(context);
             },
             child: _isLoading
                 ? SizedBox.square(
