@@ -14,22 +14,25 @@ class ViewThoughtDialog extends StatelessWidget {
         DateTime.fromMillisecondsSinceEpoch(thought.dateCreated);
 
     return AlertDialog(
-      content: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "thought at ${thoughtAt.hour}:${thoughtAt.minute}",
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              thought.content,
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-          ],
+      title: Text(
+        "thought at ${thoughtAt.hour}:${thoughtAt.minute}",
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+      content: ConstrainedBox(
+        constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.75),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              Text(
+                thought.content,
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
+          ),
         ),
       ),
       actions: [
