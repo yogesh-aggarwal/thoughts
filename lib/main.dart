@@ -6,6 +6,7 @@ import 'package:thoughts/dialogs/add_thought.dart';
 import 'package:thoughts/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/user.dart';
+import 'package:thoughts/screens/analysis.dart';
 import 'package:thoughts/screens/login.dart';
 import 'package:thoughts/screens/settings.dart';
 import 'package:thoughts/screens/thoughts.dart';
@@ -39,12 +40,63 @@ class App extends StatelessWidget {
         useMaterial3: true,
         fontFamily: GoogleFonts.inter().fontFamily,
         textTheme: const TextTheme(
+          bodySmall: TextStyle(
+            color: Colors.black54,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+          ),
           headlineMedium: TextStyle(
             fontSize: 38,
             fontWeight: FontWeight.w500,
           ),
         ),
       ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        fontFamily: GoogleFonts.inter().fontFamily,
+        textTheme: const TextTheme(
+          titleSmall: TextStyle(
+            color: Colors.white,
+            fontSize: 38,
+            fontWeight: FontWeight.w500,
+          ),
+          titleMedium: TextStyle(
+            color: Colors.white,
+            fontSize: 38,
+            fontWeight: FontWeight.w500,
+          ),
+          titleLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 38,
+            fontWeight: FontWeight.w500,
+          ),
+          headlineMedium: TextStyle(
+            fontSize: 38,
+            fontWeight: FontWeight.w500,
+          ),
+          bodySmall: TextStyle(
+            color: Colors.white38,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+          bodyMedium: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+          bodyLarge: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Colors.transparent).copyWith(
+          background: Colors.black54,
+          surface: Colors.black54,
+        ),
+      ),
+      themeMode: ThemeMode.light,
       home: Thoughts(),
     );
   }
@@ -101,9 +153,12 @@ class _ThoughtsState extends State<Thoughts> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Thoughts",
-          style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontSize: 19,
+                fontWeight: FontWeight.w500,
+              ),
         ),
         centerTitle: true,
         leading: IconButton(
@@ -132,7 +187,10 @@ class _ThoughtsState extends State<Thoughts> {
               }
             });
           },
-          icon: const Icon(Icons.calendar_month_outlined),
+          icon: Icon(
+            Icons.calendar_month_outlined,
+            color: Theme.of(context).textTheme.bodyMedium!.color,
+          ),
         ),
         actions: [
           IconButton(
@@ -143,10 +201,13 @@ class _ThoughtsState extends State<Thoughts> {
                       ? SortOrder.ascending
                       : SortOrder.descending);
             },
-            icon: Icon(context.watch<ThoughtsProvider>().sortOrder ==
-                    SortOrder.descending
-                ? Icons.arrow_downward_outlined
-                : Icons.arrow_upward_outlined),
+            icon: Icon(
+              context.watch<ThoughtsProvider>().sortOrder ==
+                      SortOrder.descending
+                  ? Icons.arrow_downward_outlined
+                  : Icons.arrow_upward_outlined,
+              color: Theme.of(context).textTheme.bodyMedium!.color,
+            ),
           ),
         ],
       ),
@@ -184,6 +245,11 @@ class _ThoughtsState extends State<Thoughts> {
             label: 'Thoughts',
           ),
           NavigationDestination(
+            selectedIcon: Icon(Icons.analytics),
+            icon: Icon(Icons.analytics_outlined),
+            label: 'Analysis',
+          ),
+          NavigationDestination(
             selectedIcon: Icon(Icons.settings),
             icon: Icon(Icons.settings_outlined),
             label: 'Settings',
@@ -195,6 +261,8 @@ class _ThoughtsState extends State<Thoughts> {
           case 0:
             return const ThoughtsScreen();
           case 1:
+            return const AnalysisScreen();
+          case 2:
             return const SettingsScreen();
           default:
             return const Placeholder();

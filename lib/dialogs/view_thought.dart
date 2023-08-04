@@ -57,7 +57,6 @@ class ViewThoughtDialog extends StatelessWidget {
 showViewThoughtDialog(BuildContext context, Thought thought) {
   showDialog(
     context: context,
-    barrierDismissible: false,
     builder: (BuildContext context) {
       return ViewThoughtDialog(thought: thought);
     },

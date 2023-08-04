@@ -39,7 +39,7 @@ class AddThoughtFormState extends State<AddThoughtForm> {
             child: _isLoading ? Container() : Text("Cancel"),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (_content.text.isEmpty) return;
 
               setState(() {
@@ -70,7 +70,6 @@ void showAddThoughtDialog({
 }) {
   showDialog(
     context: context,
-    barrierDismissible: false,
     builder: (context) {
       return AddThoughtForm(dayTimestamp: dayTimestamp);
     },
