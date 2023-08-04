@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "703494670804-57a42k2ggljqac6f4p4grejb8v651jpi.apps.googleusercontent.com",
+          "client_id": "703494670804-54dtid27m9r5p7q6s15rnh2abga1qouq.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "in.yogeshaggarwal.thoughts",
-            "certificate_hash": "ef2dbf3b85ed742da95740369740df97af5fb68f"
+            "certificate_hash": "724168e9a6aa11bd11907a0cf75184d535be17e3"
+          }
+        },
+        {
+          "client_id": "703494670804-ugejfo35iqmf3cupan5b3o84unkcfjcn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.yogeshaggarwal.thoughts",
+            "certificate_hash": "7668859e88131c787ff32f4d396d39d5995eff8b"
           }
         },
         {
