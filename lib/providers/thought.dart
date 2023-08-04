@@ -14,7 +14,7 @@ class ThoughtsProvider with ChangeNotifier {
     if (_listeningForDay == dayTimestamp) return;
 
     thoughts = null;
-    notifyListeners();
+    if (_listener != null) notifyListeners();
 
     _listener?.cancel();
     _listeningForDay = dayTimestamp;
