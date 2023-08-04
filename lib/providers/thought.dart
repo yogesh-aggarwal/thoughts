@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:thoughts/core/firebase.dart';
 import 'package:thoughts/types/thought.dart';
+import 'package:uuid/uuid.dart';
 
 class ThoughtsProvider with ChangeNotifier {
   List<Thought>? thoughts;
@@ -34,5 +35,17 @@ class ThoughtsProvider with ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  add(String content) async {
+    final thought = Thought(
+      id: Uuid().v4(),
+      content: content,
+      createdBy: auth.currentUser!.uid,
+      dayCreated: _listeningForDay!,
+      dateCreated: DateTime.now().millisecondsSinceEpoch,
+    );
+
+    await thoughtsColl.doc(thought.id).set(thought.toMap());
   }
 }

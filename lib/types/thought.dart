@@ -1,32 +1,39 @@
 class Thought {
   String id;
-  String title;
+  String content;
+  int dayCreated;
   int dateCreated;
+  String createdBy;
 
   Thought({
     required this.id,
-    required this.title,
+    required this.content,
+    required this.dayCreated,
     required this.dateCreated,
+    required this.createdBy,
   });
 
   factory Thought.fromMap(Map<String, dynamic> json) {
     return Thought(
       id: json['id'],
-      title: json['title'],
+      content: json['content'],
+      dayCreated: json['dayCreated'],
       dateCreated: json['dateCreated'],
+      createdBy: json['createdBy'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'title': title,
+      'content': content,
+      'dayCreated': dayCreated,
       'dateCreated': dateCreated,
     };
   }
 
   @override
   String toString() {
-    return 'Thought{id: $id, title: $title, dateCreated: $dateCreated}';
+    return 'Thought{id: $id, content: $content, dateCreated: $dateCreated, dayCreated: $dayCreated, createdBy: $createdBy}';
   }
 }

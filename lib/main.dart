@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/core/auth.dart';
+import 'package:thoughts/dialogs/addThought.dart';
 import 'package:thoughts/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/user.dart';
@@ -115,8 +116,13 @@ class _ThoughtsState extends State<Thoughts> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
         child: const Icon(Icons.add),
+        onPressed: () {
+          showAddThoughtDialog(
+            context: context,
+            dayTimestamp: selectedDayTimestamp,
+          );
+        },
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
