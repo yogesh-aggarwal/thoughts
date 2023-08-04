@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:thoughts/core/firebase.dart';
 import 'package:thoughts/types/user.dart';
@@ -5,6 +7,8 @@ import 'package:thoughts/types/user.dart';
 class UserProvider with ChangeNotifier {
   User? user;
   bool isListening = false;
+
+  StreamSubscription? _listener;
 
   void listen(String id) {
     if (isListening) return;
@@ -19,7 +23,9 @@ class UserProvider with ChangeNotifier {
   }
 
   void initAuth() {
-    auth.authStateChanges().listen((user) {
+    _listener?.cancel();
+    _listener = auth.authStateChanges().listen((user) {
+      print("user");
       print(user);
       if (user == null) {
         this.user = null;
