@@ -6,50 +6,53 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(height: 16),
-        Center(
-          child: Column(
-            children: [
-              Container(
-                width: 150,
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                child: Icon(Icons.person, size: 100),
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Guest",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.asset(
+              "assets/logo.png",
+              width: 180,
+              height: 180,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        SizedBox(height: 16),
-        Text(
-          "You are not logged in. Please log in to continue.",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey[600],
+          const Text(
+            "Thoughts",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            signInWithGoogle();
-          },
-          child: Text("Log in"),
-        ),
-      ],
+          const SizedBox(height: 200),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            ),
+            onPressed: () async {
+              await signInWithGoogle();
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset(
+                  "assets/google.png",
+                  width: 24,
+                  height: 24,
+                ),
+                const SizedBox(width: 12),
+                const Text(
+                  "Sign in with Google",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

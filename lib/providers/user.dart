@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:thoughts/core/firebase.dart';
-import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/types/user.dart';
 
 class UserProvider with ChangeNotifier {

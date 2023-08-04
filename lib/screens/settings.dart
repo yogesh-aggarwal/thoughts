@@ -12,9 +12,7 @@ class SettingsScreen extends StatelessWidget {
     final user = context.watch<UserProvider>().user;
 
     if (user == null) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
+      return Center(child: CircularProgressIndicator());
     }
 
     return Column(
