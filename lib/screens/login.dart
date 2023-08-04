@@ -20,6 +20,7 @@ class LoginScreen extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+          const SizedBox(height: 12),
           const Text(
             "Thoughts",
             style: TextStyle(
@@ -46,7 +47,7 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 const Text(
                   "Sign in with Google",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ],
             ),
