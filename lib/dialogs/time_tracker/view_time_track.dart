@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:thoughts/providers/thought.dart';
+import 'package:thoughts/providers/time_track.dart';
 import 'package:thoughts/types/time_tracking.dart';
 
 class ViewTimeTrackDialog extends StatelessWidget {
@@ -44,8 +44,9 @@ class ViewTimeTrackDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
+            print(timeTrack.id);
+            context.read<TimeTracksProvider>().delete(timeTrack.id);
             Navigator.pop(context);
-            context.read<ThoughtsProvider>().delete(timeTrack.id);
           },
           child: Text("Delete", style: TextStyle(color: Colors.red)),
         ),

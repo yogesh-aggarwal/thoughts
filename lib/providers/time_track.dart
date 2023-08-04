@@ -69,7 +69,7 @@ class TimeTracksProvider with ChangeNotifier {
       dateCreated: DateTime.now().millisecondsSinceEpoch,
     );
 
-    await timeTracksColl.add(timeTrack.toMap());
+    await timeTracksColl.doc(timeTrack.id).set(timeTrack.toMap());
   }
 
   delete(String id) async {
