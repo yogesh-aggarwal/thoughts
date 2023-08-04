@@ -12,11 +12,41 @@ class ViewTimeTrackDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(
-        timeTrack.name,
-        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            timeTrack.name,
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          Row(
+            children: [
+              Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: timeTrack.sessions.isEmpty ||
+                          timeTrack.sessions.last.end != null
+                      ? Colors.grey.shade400
+                      : Colors.green,
+                  shape: BoxShape.circle,
+                ),
+              ),
+              SizedBox(width: 8),
+              Text(
+                timeTrack.sessions.isEmpty ||
+                        timeTrack.sessions.last.end != null
+                    ? "Inactive"
+                    : "Active",
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+            ],
+          )
+        ],
       ),
       content: ConstrainedBox(
         constraints: BoxConstraints(
