@@ -16,7 +16,7 @@ class ViewThoughtDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(
         "thought at ${thoughtAt.hour}:${thoughtAt.minute}",
-        style: Theme.of(context).textTheme.bodySmall,
+        style: Theme.of(context).textTheme.bodyMedium,
       ),
       content: ConstrainedBox(
         constraints: BoxConstraints(

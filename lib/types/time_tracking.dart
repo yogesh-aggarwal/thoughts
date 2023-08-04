@@ -1,22 +1,22 @@
 class TimeTrackingSession {
   int start;
-  int end;
+  int? end;
 
   TimeTrackingSession({
     required this.start,
     required this.end,
   });
 
-  int get duration => end - start;
+  int get duration => (end ?? DateTime.now().millisecondsSinceEpoch) - start;
 
-  factory TimeTrackingSession.fromJson(Map<String, dynamic> json) {
+  factory TimeTrackingSession.fromMap(Map<String, dynamic> json) {
     return TimeTrackingSession(
       start: json["start"],
       end: json["end"],
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       "start": start,
       "end": end,
@@ -54,7 +54,7 @@ class TimeTrack {
       id: json["id"],
       name: json["name"],
       sessions: (json["sessions"] as List<dynamic>)
-          .map((session) => TimeTrackingSession.fromJson(session))
+          .map((session) => TimeTrackingSession.fromMap(session))
           .toList(),
       createdBy: json["createdBy"],
       dateCreated: json["dateCreated"],
@@ -66,10 +66,15 @@ class TimeTrack {
     return {
       "id": id,
       "name": name,
-      "sessions": sessions.map((session) => session.toJson()).toList(),
+      "sessions": sessions.map((session) => session.toMap()).toList(),
       "createdBy": createdBy,
       "dateCreated": dateCreated,
       "dayCreated": dayCreated,
     };
+  }
+
+  @override
+  String toString() {
+    return "TimeTrack(id: $id, name: $name, sessions: [${sessions.map((session) => session.toString()).join(', ')}], createdBy: $createdBy, dateCreated: $dateCreated, dayCreated: $dayCreated)";
   }
 }

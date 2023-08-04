@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:thoughts/core/date.dart';
 import 'package:thoughts/providers/time_track.dart';
 import 'package:thoughts/types/time_tracking.dart';
 
@@ -10,32 +11,92 @@ class ViewTimeTrackDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime thoughtAt =
-        DateTime.fromMillisecondsSinceEpoch(timeTrack.dateCreated);
-
     return AlertDialog(
       title: Text(
-        "thought at ${thoughtAt.hour}:${thoughtAt.minute}",
-        style: Theme.of(context).textTheme.bodySmall,
+        timeTrack.name,
+        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
       ),
       content: ConstrainedBox(
         constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.75),
+          maxHeight: MediaQuery.of(context).size.height * 0.75,
+          minWidth: MediaQuery.of(context).size.width * 0.75,
+        ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              SizedBox(height: 12),
+              ...timeTrack.sessions.map((session) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Start",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            visualTime(session.start),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            "End",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          Text(
+                            session.end == null
+                                ? "..."
+                                : visualTime(session.end!),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              SizedBox(height: 12),
               Text(
-                timeTrack.name,
-                style: Theme.of(context).textTheme.bodyLarge,
+                "Total time: ${visualDuration(timeTrack.duration)}",
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
             ],
           ),
         ),
       ),
       actions: [
+        timeTrack.sessions.isNotEmpty && timeTrack.sessions.last.end == null
+            ? TextButton(
+                onPressed: () {
+                  context.read<TimeTracksProvider>().pause(timeTrack.id);
+                  Navigator.pop(context);
+                },
+                child: Text("End"),
+              )
+            : TextButton(
+                onPressed: () {
+                  context.read<TimeTracksProvider>().play(timeTrack.id);
+                  Navigator.pop(context);
+                },
+                child: Text("Start"),
+              ),
+        SizedBox(width: 16),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
@@ -44,7 +105,6 @@ class ViewTimeTrackDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            print(timeTrack.id);
             context.read<TimeTracksProvider>().delete(timeTrack.id);
             Navigator.pop(context);
           },

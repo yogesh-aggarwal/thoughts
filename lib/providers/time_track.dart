@@ -75,4 +75,37 @@ class TimeTracksProvider with ChangeNotifier {
   delete(String id) async {
     await timeTracksColl.doc(id).delete();
   }
+
+  play(String id) async {
+    final userID = auth.currentUser?.uid;
+    if (userID == null) return;
+
+    timeTracks ??= [];
+
+    final timeTrack = timeTracks?.firstWhere((e) => e.id == id);
+    if (timeTrack == null) return;
+
+    final session = TimeTrackingSession(
+      start: DateTime.now().millisecondsSinceEpoch,
+      end: null,
+    );
+
+    timeTrack.sessions.add(session);
+
+    await timeTracksColl.doc(id).update(timeTrack.toMap());
+  }
+
+  pause(String id) async {
+    final userID = auth.currentUser?.uid;
+    if (userID == null) return;
+
+    timeTracks ??= [];
+
+    final timeTrack = timeTracks?.firstWhere((e) => e.id == id);
+    if (timeTrack == null) return;
+
+    timeTrack.sessions.last.end = DateTime.now().millisecondsSinceEpoch;
+
+    await timeTracksColl.doc(id).update(timeTrack.toMap());
+  }
 }
