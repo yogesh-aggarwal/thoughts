@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/dialogs/thoughts/add_thought.dart';
 import 'package:thoughts/dialogs/time_tracker/add_time_track.dart';
@@ -44,10 +45,12 @@ class App extends StatelessWidget {
           theme: ThemeData(
             colorScheme: lightDynamic,
             useMaterial3: true,
+            fontFamily: GoogleFonts.inter().fontFamily,
           ),
           darkTheme: ThemeData(
             colorScheme: darkDynamic,
             useMaterial3: true,
+            fontFamily: GoogleFonts.inter().fontFamily,
           ),
           themeMode: ThemeMode.system,
           home: Thoughts(),
