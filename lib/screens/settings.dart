@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:thoughts/core/auth.dart';
 import 'package:thoughts/core/firebase.dart';
 import 'package:thoughts/providers/user.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -62,9 +64,18 @@ class SettingsScreen extends StatelessWidget {
         ),
         SizedBox(height: 32),
         ListTile(
+          leading: Icon(Icons.person),
+          title: Text('Switch accounts'),
+          onTap: () async {
+            await GoogleSignIn().disconnect();
+            await signInWithGoogle();
+          },
+        ),
+        ListTile(
           leading: Icon(Icons.logout),
           title: Text('Logout'),
           onTap: () async {
+            await GoogleSignIn().disconnect();
             await auth.signOut();
           },
         ),
