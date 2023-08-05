@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:thoughts/core/date.dart';
 import 'package:thoughts/providers/time_track.dart';
 import 'package:thoughts/types/time_tracking.dart';
+import 'package:thoughts/dialogs/core/confirm.dart';
 
 class ViewTimeTrackDialog extends StatelessWidget {
   final TimeTrack timeTrack;
@@ -165,8 +166,20 @@ class ViewTimeTrackDialog extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        context.read<TimeTracksProvider>().delete(timeTrack.id);
-                        Navigator.pop(context);
+                        showConfirmDialog(
+                          context: context,
+                          message:
+                              "Once deleted, all the time tracking will be deleted forever. Are you absolutely sure about deleting this timer?",
+                          onOkay: () {
+                            context
+                                .read<TimeTracksProvider>()
+                                .delete(timeTrack.id);
+                            Navigator.pop(context);
+                          },
+                          onCancel: () {},
+                          okayButtonName: "Yes",
+                          cancelButtonName: "No",
+                        );
                       },
                       child:
                           Text("Delete", style: TextStyle(color: Colors.red)),

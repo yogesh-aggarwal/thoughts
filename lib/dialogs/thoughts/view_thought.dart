@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:thoughts/dialogs/core/confirm.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/types/thought.dart';
 
@@ -63,8 +64,18 @@ class ViewThoughtDialog extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.pop(context);
-                    context.read<ThoughtsProvider>().delete(thought.id);
+                    showConfirmDialog(
+                      context: context,
+                      message:
+                          "Once deleted, this thought cannot be bring back here. Are you absolutely sure about deleting this thought?",
+                      onOkay: () {
+                        context.read<ThoughtsProvider>().delete(thought.id);
+                        Navigator.pop(context);
+                      },
+                      onCancel: () {},
+                      okayButtonName: "Yes",
+                      cancelButtonName: "No",
+                    );
                   },
                   child: Text("Delete", style: TextStyle(color: Colors.red)),
                 ),
