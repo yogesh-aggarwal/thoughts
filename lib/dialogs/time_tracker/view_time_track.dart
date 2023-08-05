@@ -16,12 +16,16 @@ class ViewTimeTrackDialog extends StatelessWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            timeTrack.name,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+          Expanded(
+            child: Text(
+              timeTrack.name,
+              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+            ),
           ),
+          SizedBox(width: 8),
           Row(
             children: [
               Container(

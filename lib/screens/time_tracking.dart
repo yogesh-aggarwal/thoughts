@@ -30,21 +30,29 @@ class TimeTrackTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    timeTrack.name,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                  Expanded(
+                    child: Text(
+                      timeTrack.name,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                      overflow: TextOverflow.fade,
+                    ),
                   ),
+                  SizedBox(width: 8),
                   Container(
                     width: 12,
                     height: 12,
+                    margin: const EdgeInsets.only(top: 5),
                     decoration: BoxDecoration(
                       color: timeTrack.sessions.isEmpty ||
                               timeTrack.sessions.last.end != null
-                          ? Colors.grey.shade400
+                          ? timeTrack.sessions.isEmpty
+                              ? Colors.grey.shade400
+                              : Colors.yellow.shade700
                           : Colors.green,
                       shape: BoxShape.circle,
                     ),
