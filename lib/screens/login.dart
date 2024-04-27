@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:thoughts/core/auth.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +36,48 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 230),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          if (isLoading)
+            const CircularProgressIndicator()
+          else
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+              onPressed: () async {
+                setState(() {
+                  isLoading = true;
+                });
+                try {
+                  await signInWithGoogle();
+                } catch (e) {
+                  // ignore: use_build_context_synchronously
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.toString()),
+                    ),
+                  );
+                }
+                setState(() {
+                  isLoading = false;
+                });
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    "assets/google.png",
+                    width: 24,
+                    height: 24,
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    "Sign in with Google",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
             ),
-            onPressed: () async {
-              await signInWithGoogle();
-            },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  "assets/google.png",
-                  width: 24,
-                  height: 24,
-                ),
-                const SizedBox(width: 12),
-                const Text(
-                  "Sign in with Google",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );

@@ -68,7 +68,7 @@ class SettingsScreen extends StatelessWidget {
           title: Text('Switch accounts'),
           onTap: () async {
             await GoogleSignIn().disconnect();
-            await signInWithGoogle();
+            await signInWithGoogle(); 
           },
         ),
         ListTile(
