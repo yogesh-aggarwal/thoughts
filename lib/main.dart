@@ -1,6 +1,8 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:thoughts/dialogs/thoughts/add_thought.dart';
@@ -9,9 +11,9 @@ import 'package:thoughts/core/firebase_options.dart';
 import 'package:thoughts/providers/thought.dart';
 import 'package:thoughts/providers/time_track.dart';
 import 'package:thoughts/providers/user.dart';
-import 'package:thoughts/screens/analysis.dart';
 import 'package:thoughts/screens/login.dart';
 import 'package:thoughts/screens/settings.dart';
+import 'package:thoughts/screens/story.dart';
 import 'package:thoughts/screens/thoughts.dart';
 import 'package:thoughts/screens/time_tracking.dart';
 import 'package:thoughts/types/misc.dart';
@@ -19,6 +21,8 @@ import 'package:thoughts/types/misc.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await dotenv.load(fileName: ".env");
 
   runApp(
     MultiProvider(
@@ -163,6 +167,14 @@ class _ThoughtsState extends State<Thoughts> {
                             SortOrder.descending
                         ? SortOrder.ascending
                         : SortOrder.descending);
+              case 2:
+                Clipboard.setData(ClipboardData(text: lastGeneratedContent));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Copied your story to clipboard"),
+                  ),
+                );
+
                 break;
             }
           },
@@ -182,6 +194,12 @@ class _ThoughtsState extends State<Thoughts> {
                           SortOrder.descending
                       ? Icons.arrow_downward_outlined
                       : Icons.arrow_upward_outlined,
+                  color: Theme.of(context).textTheme.bodyMedium!.color,
+                );
+              case 2:
+                return Icon(
+                  Icons.copy,
+                  size: 22,
                   color: Theme.of(context).textTheme.bodyMedium!.color,
                 );
               default:
@@ -247,7 +265,7 @@ class _ThoughtsState extends State<Thoughts> {
       case 1:
         return const TimeTrackingScreen();
       case 2:
-        return const AnalysisScreen();
+        return const StoryScreen();
       case 3:
         return const SettingsScreen();
       default:
@@ -275,10 +293,15 @@ class _ThoughtsState extends State<Thoughts> {
           label: 'Tracker',
         ),
         NavigationDestination(
-          selectedIcon: Icon(Icons.analytics),
-          icon: Icon(Icons.analytics_outlined),
-          label: 'Analysis',
+          selectedIcon: Icon(Icons.waterfall_chart_rounded),
+          icon: Icon(Icons.waterfall_chart_rounded),
+          label: 'My Story',
         ),
+        // NavigationDestination(
+        //   selectedIcon: Icon(Icons.analytics),
+        //   icon: Icon(Icons.analytics_outlined),
+        //   label: 'Analysis',
+        // ),
         NavigationDestination(
           selectedIcon: Icon(Icons.settings),
           icon: Icon(Icons.settings_outlined),
