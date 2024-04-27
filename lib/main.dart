@@ -162,19 +162,19 @@ class _ThoughtsState extends State<Thoughts> {
                         : SortOrder.descending);
                 break;
               case 1:
-                context.read<TimeTracksProvider>().changeSortOrder(
-                    context.read<TimeTracksProvider>().sortOrder ==
-                            SortOrder.descending
-                        ? SortOrder.ascending
-                        : SortOrder.descending);
-              case 2:
                 Clipboard.setData(ClipboardData(text: lastGeneratedContent));
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text("Copied your story to clipboard"),
                   ),
                 );
-
+                break;
+              case 2:
+                context.read<TimeTracksProvider>().changeSortOrder(
+                    context.read<TimeTracksProvider>().sortOrder ==
+                            SortOrder.descending
+                        ? SortOrder.ascending
+                        : SortOrder.descending);
                 break;
             }
           },
@@ -190,16 +190,16 @@ class _ThoughtsState extends State<Thoughts> {
                 );
               case 1:
                 return Icon(
-                  context.watch<TimeTracksProvider>().sortOrder ==
-                          SortOrder.descending
-                      ? Icons.arrow_downward_outlined
-                      : Icons.arrow_upward_outlined,
+                  Icons.copy,
+                  size: 22,
                   color: Theme.of(context).textTheme.bodyMedium!.color,
                 );
               case 2:
                 return Icon(
-                  Icons.copy,
-                  size: 22,
+                  context.watch<TimeTracksProvider>().sortOrder ==
+                          SortOrder.descending
+                      ? Icons.arrow_downward_outlined
+                      : Icons.arrow_upward_outlined,
                   color: Theme.of(context).textTheme.bodyMedium!.color,
                 );
               default:
@@ -233,6 +233,8 @@ class _ThoughtsState extends State<Thoughts> {
           },
         );
       case 1:
+        break;
+      case 2:
         return FloatingActionButton(
           child: Icon(selectedDayTimestamp == todayTimestamp
               ? Icons.add
@@ -251,7 +253,6 @@ class _ThoughtsState extends State<Thoughts> {
             }
           },
         );
-      case 2:
       case 3:
       default:
         return null;
@@ -263,9 +264,9 @@ class _ThoughtsState extends State<Thoughts> {
       case 0:
         return const ThoughtsScreen();
       case 1:
-        return const TimeTrackingScreen();
-      case 2:
         return const StoryScreen();
+      case 2:
+        return const TimeTrackingScreen();
       case 3:
         return const SettingsScreen();
       default:
@@ -288,14 +289,14 @@ class _ThoughtsState extends State<Thoughts> {
           label: 'Thoughts',
         ),
         NavigationDestination(
-          selectedIcon: Icon(Icons.timer),
-          icon: Icon(Icons.timer_outlined),
-          label: 'Tracker',
-        ),
-        NavigationDestination(
           selectedIcon: Icon(Icons.waterfall_chart_rounded),
           icon: Icon(Icons.waterfall_chart_rounded),
           label: 'My Story',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.timer),
+          icon: Icon(Icons.timer_outlined),
+          label: 'Tracker',
         ),
         // NavigationDestination(
         //   selectedIcon: Icon(Icons.analytics),
