@@ -259,6 +259,8 @@ class _ThoughtsState extends State<Thoughts> {
       default:
         return null;
     }
+
+    return null;
   }
 
   Widget _buildBody() {
