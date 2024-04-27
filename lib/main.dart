@@ -116,40 +116,42 @@ class _ThoughtsState extends State<Thoughts> {
             ),
       ),
       centerTitle: true,
-      leading: IconButton(
-        onPressed: () {
-          showDatePicker(
-              context: context,
-              initialDate:
-                  DateTime.fromMillisecondsSinceEpoch(selectedDayTimestamp),
-              firstDate: DateTime(
-                DateTime.now().year - 10,
-                DateTime.now().month,
-                DateTime.now().day,
+      leading: _selectedIndex == 3
+          ? Container()
+          : IconButton(
+              onPressed: () {
+                showDatePicker(
+                    context: context,
+                    initialDate: DateTime.fromMillisecondsSinceEpoch(
+                        selectedDayTimestamp),
+                    firstDate: DateTime(
+                      DateTime.now().year - 10,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                    ),
+                    lastDate: DateTime(
+                      DateTime.now().year,
+                      DateTime.now().month,
+                      DateTime.now().day,
+                    )).then((value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedDayTimestamp = value.millisecondsSinceEpoch;
+                    });
+                    context
+                        .read<ThoughtsProvider>()
+                        .listenForDay(value.millisecondsSinceEpoch);
+                    context
+                        .read<TimeTracksProvider>()
+                        .listenForDay(value.millisecondsSinceEpoch);
+                  }
+                });
+              },
+              icon: Icon(
+                Icons.calendar_month_outlined,
+                color: Theme.of(context).textTheme.bodyMedium!.color,
               ),
-              lastDate: DateTime(
-                DateTime.now().year,
-                DateTime.now().month,
-                DateTime.now().day,
-              )).then((value) {
-            if (value != null) {
-              setState(() {
-                selectedDayTimestamp = value.millisecondsSinceEpoch;
-              });
-              context
-                  .read<ThoughtsProvider>()
-                  .listenForDay(value.millisecondsSinceEpoch);
-              context
-                  .read<TimeTracksProvider>()
-                  .listenForDay(value.millisecondsSinceEpoch);
-            }
-          });
-        },
-        icon: Icon(
-          Icons.calendar_month_outlined,
-          color: Theme.of(context).textTheme.bodyMedium!.color,
-        ),
-      ),
+            ),
       actions: [
         IconButton(
           onPressed: () {
