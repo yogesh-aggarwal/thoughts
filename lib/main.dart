@@ -102,6 +102,192 @@ class _ThoughtsState extends State<Thoughts> {
     });
   }
 
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      title: Text(
+        "Thoughts",
+        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+              fontSize: 19,
+              fontWeight: FontWeight.w500,
+            ),
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        onPressed: () {
+          showDatePicker(
+              context: context,
+              initialDate:
+                  DateTime.fromMillisecondsSinceEpoch(selectedDayTimestamp),
+              firstDate: DateTime(
+                DateTime.now().year - 10,
+                DateTime.now().month,
+                DateTime.now().day,
+              ),
+              lastDate: DateTime(
+                DateTime.now().year,
+                DateTime.now().month,
+                DateTime.now().day,
+              )).then((value) {
+            if (value != null) {
+              setState(() {
+                selectedDayTimestamp = value.millisecondsSinceEpoch;
+              });
+              context
+                  .read<ThoughtsProvider>()
+                  .listenForDay(value.millisecondsSinceEpoch);
+              context
+                  .read<TimeTracksProvider>()
+                  .listenForDay(value.millisecondsSinceEpoch);
+            }
+          });
+        },
+        icon: Icon(
+          Icons.calendar_month_outlined,
+          color: Theme.of(context).textTheme.bodyMedium!.color,
+        ),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () {
+            switch (_selectedIndex) {
+              case 0:
+                context.read<ThoughtsProvider>().changeSortOrder(
+                    context.read<ThoughtsProvider>().sortOrder ==
+                            SortOrder.descending
+                        ? SortOrder.ascending
+                        : SortOrder.descending);
+                break;
+              case 1:
+                context.read<TimeTracksProvider>().changeSortOrder(
+                    context.read<TimeTracksProvider>().sortOrder ==
+                            SortOrder.descending
+                        ? SortOrder.ascending
+                        : SortOrder.descending);
+                break;
+            }
+          },
+          icon: (() {
+            switch (_selectedIndex) {
+              case 0:
+                return Icon(
+                  context.watch<ThoughtsProvider>().sortOrder ==
+                          SortOrder.descending
+                      ? Icons.arrow_downward_outlined
+                      : Icons.arrow_upward_outlined,
+                  color: Theme.of(context).textTheme.bodyMedium!.color,
+                );
+              case 1:
+                return Icon(
+                  context.watch<TimeTracksProvider>().sortOrder ==
+                          SortOrder.descending
+                      ? Icons.arrow_downward_outlined
+                      : Icons.arrow_upward_outlined,
+                  color: Theme.of(context).textTheme.bodyMedium!.color,
+                );
+              default:
+                return Container();
+            }
+          })(),
+        ),
+      ],
+    );
+  }
+
+  Widget? _buildFloatingActionButton() {
+    switch (_selectedIndex) {
+      case 0:
+        return FloatingActionButton(
+          child: Icon(selectedDayTimestamp == todayTimestamp
+              ? Icons.add
+              : Icons.today_outlined),
+          onPressed: () {
+            if (selectedDayTimestamp == todayTimestamp) {
+              showAddThoughtDialog(
+                context: context,
+                dayTimestamp: selectedDayTimestamp,
+              );
+            } else {
+              setState(() {
+                selectedDayTimestamp = todayTimestamp;
+              });
+              context.read<ThoughtsProvider>().listenForDay(todayTimestamp);
+            }
+          },
+        );
+      case 1:
+        return FloatingActionButton(
+          child: Icon(selectedDayTimestamp == todayTimestamp
+              ? Icons.add
+              : Icons.today_outlined),
+          onPressed: () {
+            if (selectedDayTimestamp == todayTimestamp) {
+              showAddTimeTrackDialog(
+                context: context,
+                dayTimestamp: selectedDayTimestamp,
+              );
+            } else {
+              setState(() {
+                selectedDayTimestamp = todayTimestamp;
+              });
+              context.read<TimeTracksProvider>().listenForDay(todayTimestamp);
+            }
+          },
+        );
+      case 2:
+      case 3:
+      default:
+        return null;
+    }
+  }
+
+  Widget _buildBody() {
+    switch (_selectedIndex) {
+      case 0:
+        return const ThoughtsScreen();
+      case 1:
+        return const TimeTrackingScreen();
+      case 2:
+        return const AnalysisScreen();
+      case 3:
+        return const SettingsScreen();
+      default:
+        return const Placeholder();
+    }
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return NavigationBar(
+      selectedIndex: _selectedIndex,
+      onDestinationSelected: (int index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+      destinations: const <NavigationDestination>[
+        NavigationDestination(
+          selectedIcon: Icon(Icons.psychology),
+          icon: Icon(Icons.psychology_alt_outlined),
+          label: 'Thoughts',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.timer),
+          icon: Icon(Icons.timer_outlined),
+          label: 'Tracker',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.analytics),
+          icon: Icon(Icons.analytics_outlined),
+          label: 'Analysis',
+        ),
+        NavigationDestination(
+          selectedIcon: Icon(Icons.settings),
+          icon: Icon(Icons.settings_outlined),
+          label: 'Settings',
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
@@ -113,186 +299,10 @@ class _ThoughtsState extends State<Thoughts> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Thoughts",
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                fontSize: 19,
-                fontWeight: FontWeight.w500,
-              ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            showDatePicker(
-                context: context,
-                initialDate:
-                    DateTime.fromMillisecondsSinceEpoch(selectedDayTimestamp),
-                firstDate: DateTime(
-                  DateTime.now().year - 10,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                ),
-                lastDate: DateTime(
-                  DateTime.now().year,
-                  DateTime.now().month,
-                  DateTime.now().day,
-                )).then((value) {
-              if (value != null) {
-                setState(() {
-                  selectedDayTimestamp = value.millisecondsSinceEpoch;
-                });
-                context
-                    .read<ThoughtsProvider>()
-                    .listenForDay(value.millisecondsSinceEpoch);
-                context
-                    .read<TimeTracksProvider>()
-                    .listenForDay(value.millisecondsSinceEpoch);
-              }
-            });
-          },
-          icon: Icon(
-            Icons.calendar_month_outlined,
-            color: Theme.of(context).textTheme.bodyMedium!.color,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              switch (_selectedIndex) {
-                case 0:
-                  context.read<ThoughtsProvider>().changeSortOrder(
-                      context.read<ThoughtsProvider>().sortOrder ==
-                              SortOrder.descending
-                          ? SortOrder.ascending
-                          : SortOrder.descending);
-                  break;
-                case 1:
-                  context.read<TimeTracksProvider>().changeSortOrder(
-                      context.read<TimeTracksProvider>().sortOrder ==
-                              SortOrder.descending
-                          ? SortOrder.ascending
-                          : SortOrder.descending);
-                  break;
-              }
-            },
-            icon: (() {
-              switch (_selectedIndex) {
-                case 0:
-                  return Icon(
-                    context.watch<ThoughtsProvider>().sortOrder ==
-                            SortOrder.descending
-                        ? Icons.arrow_downward_outlined
-                        : Icons.arrow_upward_outlined,
-                    color: Theme.of(context).textTheme.bodyMedium!.color,
-                  );
-                case 1:
-                  return Icon(
-                    context.watch<TimeTracksProvider>().sortOrder ==
-                            SortOrder.descending
-                        ? Icons.arrow_downward_outlined
-                        : Icons.arrow_upward_outlined,
-                    color: Theme.of(context).textTheme.bodyMedium!.color,
-                  );
-                default:
-                  return Container();
-              }
-            })(),
-          ),
-        ],
-      ),
-      floatingActionButton: (() {
-        switch (_selectedIndex) {
-          case 0:
-            return FloatingActionButton(
-              child: Icon(selectedDayTimestamp == todayTimestamp
-                  ? Icons.add
-                  : Icons.today_outlined),
-              onPressed: () {
-                if (selectedDayTimestamp == todayTimestamp) {
-                  showAddThoughtDialog(
-                    context: context,
-                    dayTimestamp: selectedDayTimestamp,
-                  );
-                } else {
-                  setState(() {
-                    selectedDayTimestamp = todayTimestamp;
-                  });
-                  context.read<ThoughtsProvider>().listenForDay(todayTimestamp);
-                }
-              },
-            );
-          case 1:
-            return FloatingActionButton(
-              child: Icon(selectedDayTimestamp == todayTimestamp
-                  ? Icons.add
-                  : Icons.today_outlined),
-              onPressed: () {
-                if (selectedDayTimestamp == todayTimestamp) {
-                  showAddTimeTrackDialog(
-                    context: context,
-                    dayTimestamp: selectedDayTimestamp,
-                  );
-                } else {
-                  setState(() {
-                    selectedDayTimestamp = todayTimestamp;
-                  });
-                  context
-                      .read<TimeTracksProvider>()
-                      .listenForDay(todayTimestamp);
-                }
-              },
-            );
-          case 2:
-          case 3:
-          default:
-            return null;
-        }
-      })(),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        destinations: const <NavigationDestination>[
-          NavigationDestination(
-            selectedIcon: Icon(Icons.psychology),
-            icon: Icon(Icons.psychology_alt_outlined),
-            label: 'Thoughts',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.timer),
-            icon: Icon(Icons.timer_outlined),
-            label: 'Tracker',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.analytics),
-            icon: Icon(Icons.analytics_outlined),
-            label: 'Analysis',
-          ),
-          NavigationDestination(
-            selectedIcon: Icon(Icons.settings),
-            icon: Icon(Icons.settings_outlined),
-            label: 'Settings',
-          ),
-        ],
-      ),
-      body: (() {
-        switch (_selectedIndex) {
-          case 0:
-            return const ThoughtsScreen();
-          case 1:
-            return const TimeTrackingScreen();
-          case 2:
-            return const AnalysisScreen();
-          case 3:
-            return const SettingsScreen();
-          default:
-            return const Placeholder();
-        }
-      })(),
+      appBar: _buildAppBar(),
+      floatingActionButton: _buildFloatingActionButton(),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+      body: _buildBody(),
     );
   }
 }
