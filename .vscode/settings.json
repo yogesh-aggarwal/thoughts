@@ -1,6 +1,6 @@
 {
    "explorer.fileNesting.patterns": {
       ".env": ".env.example",
-      "pubspec.yaml": "README.md, .gitignore,.metadata,*.iml,*lock,*.yaml,.flutter-plugins*,*.g.dart",
+      "pubspec.yaml": "README.md, .gitignore,.metadata,*.iml,*lock,*.yaml,.flutter-plugins*,*.g.dart,*.json",
    }
 }
